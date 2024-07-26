@@ -1,5 +1,5 @@
 import { Paper, BottomNavigation, BottomNavigationAction } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import RestoreIcon from "@mui/icons-material/Restore";
@@ -7,10 +7,19 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArchiveIcon from "@mui/icons-material/Archive";
 
 import { Routes } from "../../routing/routes";
+import { HeaderTitles } from "../constants/header-titles";
 
-const BottomNavBar = () => {
-  const [value, setValue] = useState(0);
+type BottomNavBarProps = {
+  updateTitle: (title: string) => void;
+};
+
+const BottomNavBar = ({ updateTitle }: BottomNavBarProps) => {
+  const [value, setValue] = useState<number>(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate(Routes.SURAHS);
+  }, [navigate]);
 
   const handleBottomNavChange = (
     _event: React.SyntheticEvent<Element, Event>,
@@ -19,16 +28,19 @@ const BottomNavBar = () => {
     switch (newValue) {
       case 0: {
         navigate(Routes.SURAHS);
+        updateTitle(HeaderTitles.SURAHS);
         break;
       }
 
       case 1: {
         navigate(Routes.JUZS);
+        updateTitle(HeaderTitles.JUZS);
         break;
       }
 
       case 2: {
         navigate(Routes.QURAN);
+        updateTitle(HeaderTitles.QURAN);
         break;
       }
     }
