@@ -8,6 +8,12 @@ interface Error {
 
 export const api = axios.create({
     baseURL: "https://api.quran.com/api/v4",
+    maxBodyLength: Infinity,
+});
+
+export const apiAlt = axios.create({
+    baseURL: "https://api.qurancdn.com/api/qdc",
+    maxBodyLength: Infinity,
 });
 
 // defining a custom error handler for all APIs
@@ -25,5 +31,8 @@ const errorHandler = (error: Error) => {
 // registering the custom error handler to the
 // "api" axios instance
 api.interceptors.response.use(undefined, (error) => {
+    return errorHandler(error);
+});
+apiAlt.interceptors.response.use(undefined, (error) => {
     return errorHandler(error);
 });

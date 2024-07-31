@@ -13,13 +13,12 @@ export default function Surahs() {
 
   return (
     <Grid
-      sx={{ padding: 4, paddingBottom: 12 }}
       container
-      spacing={{ xs: 2, md: 3 }}
+      spacing={{ xs: 2, md: 4 }}
       columns={{ xs: 1, sm: 8, md: 12, lg: 16 }}
     >
       {surahs.map((surah, index) => (
-        <SurahItem key={index} surah={surah} />
+        <SurahItem key={index} index={index} surah={surah} />
       ))}
     </Grid>
   );

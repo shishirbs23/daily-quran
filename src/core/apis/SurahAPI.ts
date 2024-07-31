@@ -13,7 +13,7 @@ export const SurahAPI = {
     });
 
     // returning the product returned by the API
-    return response;
+    return response.data.chapter;
   },
   getSurahInfo: async function (id: number, cancel = false) {
     const response = await api.request({
@@ -27,7 +27,7 @@ export const SurahAPI = {
     });
 
     // returning the product returned by the API
-    return response;
+    return response.data.chapter_info;
   },
   getAllSurahs: async function (cancel = false) {
     const response = await api.request({

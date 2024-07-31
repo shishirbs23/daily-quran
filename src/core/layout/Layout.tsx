@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import BottomNavBar from "../components/BottomNav";
 
 import { HeaderTitles } from "../constants/header-titles";
+import { Box } from "@mui/material";
 
 const Layout = () => {
   const [currentTitle, setCurrentTitle] = useState<string>(HeaderTitles.SURAHS);
@@ -17,7 +18,9 @@ const Layout = () => {
   return (
     <>
       <Header title={currentTitle} />
-      <Outlet />
+      <Box sx={{ padding: 4, paddingBottom: 12 }}>
+        <Outlet />
+      </Box>
       <BottomNavBar updateTitle={updateTitle} />
     </>
   );

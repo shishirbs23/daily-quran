@@ -7,10 +7,20 @@ type HeaderProps = {
 const Header = ({ title }: HeaderProps) => (
   <AppBar position="static" color="transparent">
     <Toolbar>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Typography
+        variant="h6"
+        component="div"
+        sx={{ flexGrow: 1 }}
+        className="text-slate-700"
+      >
         Daily Quran
       </Typography>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Typography
+        variant="h6"
+        component="div"
+        sx={{ flexGrow: 1 }}
+        className="text-slate-700"
+      >
         {title}
       </Typography>
     </Toolbar>
