@@ -11,6 +11,7 @@ import { Verse } from "../core/models/Verse";
 import VerseItem from "../components/VerseItem";
 import { ReciterAPI } from "../core/apis/ReciterAPI";
 import { AudioData, AudioFile } from "../core/models/AudioData";
+import SurahPlayer from "../components/SurahPlayer";
 
 const SurahDetails = () => {
   const [surah, setSurah] = useState<Surah>();
@@ -18,8 +19,10 @@ const SurahDetails = () => {
   const [verses, setVerses] = useState<Verse[]>();
   const [pagination, setPagination] = useState<Pagination>();
   const [audioFile, setAudioFile] = useState<AudioFile>();
-  const [audioSrc, setAudioSrc] = useState<string>();
-  const [stopTime, setStopTime] = useState<number>(0);
+  const [audioSrc, setAudioSrc] = useState<string>("");
+  const [stopTime, setStopTime] = useState<number | null>(null);
+  const [ayahIndex, setAyahIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState<number>(0);
 
   const { surahId } = useParams();
 
@@ -32,12 +35,9 @@ const SurahDetails = () => {
         setSurahInfo(surahInfo)
       );
       VerseAPI.getBySurah(+surahId).then((verseData: VerseData) => {
-        verseData.verses.map((verse) => {
-          verse.words = verse.words.reverse();
-        });
-
-        setVerses(verseData.verses);
-        setPagination(verseData.pagination);
+        const { verses, pagination } = verseData;
+        setVerses(verses);
+        setPagination(pagination);
       });
       ReciterAPI.getSurahAudioData(+surahId, 7).then((audioData: AudioData) => {
         audioData.audio_files[0]?.verse_timings.map((timing) => {
@@ -46,17 +46,13 @@ const SurahDetails = () => {
           );
           return timing;
         });
-
-        console.log(audioFile);
-
         setAudioFile(audioData.audio_files[0]);
-        console.log(audioFile);
       });
     }
   }, []);
 
   const playFromSpecificTime = (index: number) => {
-    console.log(audioFile);
+    setAyahIndex(index);
 
     const totalSegments: number =
       audioFile?.verse_timings[index].segments.length ?? 0;
@@ -64,8 +60,6 @@ const SurahDetails = () => {
     fromTime = fromTime === 0 ? 1 : fromTime;
     const toTime =
       audioFile?.verse_timings[index].segments[totalSegments - 1][2];
-
-    console.log(totalSegments, fromTime, toTime);
 
     if (audioRef.current && fromTime && toTime) {
       !audioSrc && setAudioSrc(audioFile?.audio_url);
@@ -79,16 +73,9 @@ const SurahDetails = () => {
     }
   };
 
-  const handleTimeUpdate = () => {
-    if (
-      audioRef.current &&
-      stopTime !== null &&
-      audioRef.current.currentTime >= stopTime
-    ) {
-      audioRef.current.pause();
-      setStopTime(0);
-    }
-  };
+  const updateWordIndex = (wordIndex: number) => setWordIndex(wordIndex);
+
+  const resetStoptime = () => setStopTime(0);
 
   return (
     <Box className="text-slate-700">
@@ -109,22 +96,27 @@ const SurahDetails = () => {
           <VerseItem
             key={verse.id}
             index={index}
+            ayahIndex={ayahIndex}
+            wordIndex={wordIndex}
             verse={verse}
-            audioFile={audioFile}
             playFromSpecificTime={playFromSpecificTime}
           />
         ))}
       </Box>
-      <div
+      {/*  <div
         className="pt-6"
         dangerouslySetInnerHTML={{ __html: surahInfo?.text ?? "" }}
-      ></div>
-      <audio
-        ref={audioRef}
-        controls
-        src={audioSrc}
-        onTimeUpdate={handleTimeUpdate}
-      ></audio>
+      ></div> */}
+      {ayahIndex != null && (
+        <SurahPlayer
+          audioRef={audioRef}
+          audioSrc={audioSrc}
+          segments={audioFile?.verse_timings[ayahIndex].segments ?? []}
+          stopTime={stopTime}
+          updateWordIndex={updateWordIndex}
+          resetStoptime={resetStoptime}
+        />
+      )}
     </Box>
   );
 };
