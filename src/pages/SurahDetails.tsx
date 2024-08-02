@@ -22,10 +22,11 @@ const SurahDetails = () => {
   const [audioSrc, setAudioSrc] = useState<string>("");
   const [stopTime, setStopTime] = useState<number | null>(null);
   const [ayahIndex, setAyahIndex] = useState(0);
-  const [wordIndex, setWordIndex] = useState<number>(0);
+  const [wordIndex, setWordIndex] = useState<number>(-1);
 
   const { surahId } = useParams();
 
+  const verseRefs = useRef([]);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
@@ -51,15 +52,19 @@ const SurahDetails = () => {
     }
   }, []);
 
-  const playFromSpecificTime = (index: number) => {
+  const playFromSpecificTime = (index: number, pauseSurah: boolean) => {
     setAyahIndex(index);
 
     const totalSegments: number =
       audioFile?.verse_timings[index].segments.length ?? 0;
+
     let fromTime = audioFile?.verse_timings[index].segments[0][1];
     fromTime = fromTime === 0 ? 1 : fromTime;
+
     const toTime =
       audioFile?.verse_timings[index].segments[totalSegments - 1][2];
+
+    console.log(pauseSurah, index, fromTime, toTime);
 
     if (audioRef.current && fromTime && toTime) {
       !audioSrc && setAudioSrc(audioFile?.audio_url);
@@ -68,14 +73,31 @@ const SurahDetails = () => {
 
       setTimeout(() => {
         audioRef.current && audioRef.current.play();
-        setStopTime(toTime / 1000);
+
+        if (pauseSurah) {
+          console.log('pause the surah');
+          setStopTime(toTime / 1000);
+        }
       }, 0);
     }
   };
 
+  const scrollToTop = (index: number) => {
+    verseRefs.current[index] &&
+      (verseRefs.current[index] as HTMLDivElement).scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+  };
+
+  const updateAyahIndex = (ayahIndex: number) => {
+    setAyahIndex(ayahIndex);
+    scrollToTop(ayahIndex);
+  };
+
   const updateWordIndex = (wordIndex: number) => setWordIndex(wordIndex);
 
-  const resetStoptime = () => setStopTime(0);
+  const resetStoptime = () => setStopTime(null);
 
   return (
     <Box className="text-slate-700">
@@ -93,26 +115,35 @@ const SurahDetails = () => {
       </Box>
       <Box className="m-auto mt-20 w-10/12">
         {verses?.map((verse, index) => (
-          <VerseItem
+          <div
             key={verse.id}
-            index={index}
-            ayahIndex={ayahIndex}
-            wordIndex={wordIndex}
-            verse={verse}
-            playFromSpecificTime={playFromSpecificTime}
-          />
+            ref={(el) =>
+              ((verseRefs.current[index] as HTMLDivElement) =
+                el as HTMLDivElement)
+            }
+          >
+            <VerseItem
+              index={index}
+              ayahIndex={ayahIndex}
+              wordIndex={wordIndex}
+              verse={verse}
+              playFromSpecificTime={playFromSpecificTime}
+            />
+          </div>
         ))}
       </Box>
-      {/*  <div
+      <div
         className="pt-6"
         dangerouslySetInnerHTML={{ __html: surahInfo?.text ?? "" }}
-      ></div> */}
+      ></div>
       {ayahIndex != null && (
         <SurahPlayer
           audioRef={audioRef}
           audioSrc={audioSrc}
-          segments={audioFile?.verse_timings[ayahIndex].segments ?? []}
+          ayahIndex={ayahIndex}
+          verseTimings={audioFile?.verse_timings ?? []}
           stopTime={stopTime}
+          updateAyahIndex={updateAyahIndex}
           updateWordIndex={updateWordIndex}
           resetStoptime={resetStoptime}
         />

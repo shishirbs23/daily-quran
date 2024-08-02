@@ -1,5 +1,5 @@
 import { Divider, Grid, IconButton, Tooltip, Typography } from "@mui/material";
-import { PlayCircleFilledSharp } from "@mui/icons-material";
+import { PlayCircleFilledSharp, DoubleArrowSharp } from "@mui/icons-material";
 import { Verse } from "../core/models/Verse";
 
 type VerseItemProps = {
@@ -7,7 +7,7 @@ type VerseItemProps = {
   ayahIndex: number;
   wordIndex: number;
   verse: Verse;
-  playFromSpecificTime: (index: number) => void;
+  playFromSpecificTime: (index: number, pauseSurah: boolean) => void;
 };
 
 const VerseItem = ({
@@ -17,8 +17,8 @@ const VerseItem = ({
   verse,
   playFromSpecificTime,
 }: VerseItemProps) => {
-  const handlePlayHighlightSurah = (index: number) => {
-    playFromSpecificTime(index);
+  const handlePlayHighlightSurah = (index: number, pauseSurah: boolean) => {
+    playFromSpecificTime(index, pauseSurah);
   };
 
   return (
@@ -35,9 +35,18 @@ const VerseItem = ({
           <Tooltip title="Play Ayah" arrow placement="top">
             <IconButton
               sx={{ padding: 0, marginTop: 1 }}
-              onClick={() => handlePlayHighlightSurah(index)}
+              onClick={() => handlePlayHighlightSurah(index, true)}
             >
               <PlayCircleFilledSharp />
+            </IconButton>
+          </Tooltip>
+          <div></div>
+          <Tooltip title="Play Surah from this Ayah" arrow placement="top">
+            <IconButton
+              sx={{ padding: 0, marginTop: 1 }}
+              onClick={() => handlePlayHighlightSurah(index, false)}
+            >
+              <DoubleArrowSharp />
             </IconButton>
           </Tooltip>
         </Grid>
