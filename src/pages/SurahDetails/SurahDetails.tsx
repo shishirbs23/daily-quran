@@ -1,17 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { SurahAPI } from "../core/apis/SurahAPI";
-import { Box, capitalize, Typography } from "@mui/material";
-import { Surah } from "../core/models/Surah";
-import { SurahInfo } from "../core/models/SurahInfo";
-import { VerseAPI } from "../core/apis/VerseAPI";
-import { VerseData } from "../core/models/VerseData";
-import { Pagination } from "../core/models/Pagination";
-import { Verse } from "../core/models/Verse";
-import VerseItem from "../components/VerseItem";
-import { ReciterAPI } from "../core/apis/ReciterAPI";
-import { AudioData, AudioFile } from "../core/models/AudioData";
-import SurahPlayer from "../components/SurahPlayer";
+import { Box, Button, capitalize, Typography } from "@mui/material";
+import { PlayCircle } from "@mui/icons-material";
+
+// Components
+import SurahPlayer from "./components/SurahPlayer";
+import VerseItem from "./components/VerseItem";
+
+// Models
+import { AudioData, AudioFile } from "../../core/models/AudioData";
+import { Surah } from "../../core/models/Surah";
+import { SurahInfo } from "../../core/models/SurahInfo";
+import { VerseData } from "../../core/models/VerseData";
+import { Pagination } from "../../core/models/Pagination";
+import { Verse } from "../../core/models/Verse";
+
+// APIs
+import { SurahAPI } from "../../core/apis/SurahAPI";
+import { VerseAPI } from "../../core/apis/VerseAPI";
+import { ReciterAPI } from "../../core/apis/ReciterAPI";
 
 const SurahDetails = () => {
   const [surah, setSurah] = useState<Surah>();
@@ -26,7 +33,7 @@ const SurahDetails = () => {
 
   const { surahId } = useParams();
 
-  const verseRefs = useRef([]);
+  const verseRefs = useRef<HTMLDivElement[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
@@ -50,7 +57,7 @@ const SurahDetails = () => {
         setAudioFile(audioData.audio_files[0]);
       });
     }
-  }, []);
+  }, [surahId]);
 
   const playFromSpecificTime = (index: number, pauseSurah: boolean) => {
     setAyahIndex(index);
@@ -64,8 +71,6 @@ const SurahDetails = () => {
     const toTime =
       audioFile?.verse_timings[index].segments[totalSegments - 1][2];
 
-    console.log(pauseSurah, index, fromTime, toTime);
-
     if (audioRef.current && fromTime && toTime) {
       !audioSrc && setAudioSrc(audioFile?.audio_url);
 
@@ -75,7 +80,6 @@ const SurahDetails = () => {
         audioRef.current && audioRef.current.play();
 
         if (pauseSurah) {
-          console.log('pause the surah');
           setStopTime(toTime / 1000);
         }
       }, 0);
@@ -113,6 +117,19 @@ const SurahDetails = () => {
           Revelation Place: {capitalize(surah?.revelation_place ?? "")}
         </Typography>
       </Box>
+
+      <Box className="flex justify-center my-4">
+        <Button
+          sx={{ textTransform: "capitalize" }}
+          variant="contained"
+          startIcon={<PlayCircle />}
+          disableElevation
+          onClick={() => playFromSpecificTime(0, false)}
+        >
+          Play Full Surah
+        </Button>
+      </Box>
+
       <Box className="m-auto mt-20 w-10/12">
         {verses?.map((verse, index) => (
           <div
@@ -132,10 +149,12 @@ const SurahDetails = () => {
           </div>
         ))}
       </Box>
+
       <div
         className="pt-6"
         dangerouslySetInnerHTML={{ __html: surahInfo?.text ?? "" }}
       ></div>
+
       {ayahIndex != null && (
         <SurahPlayer
           audioRef={audioRef}

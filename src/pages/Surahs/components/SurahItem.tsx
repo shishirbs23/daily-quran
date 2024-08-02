@@ -1,8 +1,12 @@
 import Grid from "@mui/material/Grid";
-import { Surah } from "../core/models/Surah";
 import { Box, Typography } from "@mui/material";
+
+// Routing
 import { useNavigate } from "react-router-dom";
-import { Routes } from "../routing/routes";
+import { Routes } from "../../../core/routing/routes";
+
+// Models
+import { Surah } from "../../../core/models/Surah";
 
 type SurahItemProps = {
   index: number;

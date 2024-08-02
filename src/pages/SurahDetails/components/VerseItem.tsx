@@ -1,6 +1,6 @@
 import { Divider, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import { PlayCircleFilledSharp, DoubleArrowSharp } from "@mui/icons-material";
-import { Verse } from "../core/models/Verse";
+import { Verse } from "../../../core/models/Verse";
 
 type VerseItemProps = {
   index: number;

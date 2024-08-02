@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { SurahAPI } from "../core/apis/SurahAPI";
-import { Surah } from "../core/models/Surah";
+import { SurahAPI } from "../../core/apis/SurahAPI";
+import { Surah } from "../../core/models/Surah";
 import Grid from "@mui/material/Grid";
-import SurahItem from "../components/SurahItem";
+import SurahItem from "./components/SurahItem";
 
 export default function Surahs() {
   const [surahs, setSurahs] = useState<Surah[]>([]);

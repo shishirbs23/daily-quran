@@ -6,8 +6,8 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArchiveIcon from "@mui/icons-material/Archive";
 
-import { Routes } from "../../routing/routes";
 import { HeaderTitles } from "../constants/header-titles";
+import { Routes } from "../routing/routes";
 
 type BottomNavBarProps = {
   updateTitle: (title: string) => void;
@@ -39,6 +39,12 @@ const BottomNavBar = ({ updateTitle }: BottomNavBarProps) => {
       }
 
       case 2: {
+        navigate(Routes.PAGES);
+        updateTitle(HeaderTitles.QURAN);
+        break;
+      }
+
+      case 3: {
         navigate(Routes.QURAN);
         updateTitle(HeaderTitles.QURAN);
         break;
@@ -60,6 +66,7 @@ const BottomNavBar = ({ updateTitle }: BottomNavBarProps) => {
       >
         <BottomNavigationAction label="Surahs" icon={<RestoreIcon />} />
         <BottomNavigationAction label="Juzs" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Pages" icon={<ArchiveIcon />} />
         <BottomNavigationAction label="Quran" icon={<ArchiveIcon />} />
       </BottomNavigation>
     </Paper>

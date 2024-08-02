@@ -6,14 +6,15 @@ import {
 } from "react-router-dom";
 
 // Root Layout
-import Layout from "../core/layout/Layout";
+import Layout from "../layout/Layout";
 
 // Pages
-import Surahs from "../pages/Surahs";
-import SurahDetails from "../pages/SurahDetails";
-import Juzs from "../pages/Juzs";
-import Quran from "../pages/Quran";
-import ErrorPage from "../pages/ErrorPage";
+import Surahs from "../../pages/Surahs/Surahs";
+import SurahDetails from "../../pages/SurahDetails/SurahDetails";
+import Juzs from "../../pages/Juzs/Juzs";
+import Pages from "../../pages/Pages/Pages";
+import Quran from "../../pages/Quran/Quran";
+import ErrorPage from "../../pages/ErrorPage";
 
 // Routes enum
 import { Routes } from "./routes";
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route path={Routes.SURAHS} element={<Surahs />} />
       <Route path={`${Routes.SURAHS}/:surahId`} element={<SurahDetails />} />
       <Route path={Routes.JUZS} element={<Juzs />} />
+      <Route path={Routes.PAGES} element={<Pages />} />
       <Route path={Routes.QURAN} element={<Quran />} />
     </Route>
   )
