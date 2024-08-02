@@ -34,6 +34,8 @@ const VerseItem = ({
           <Typography>{verse.verse_key}</Typography>
           <Tooltip title="Play Ayah" arrow placement="top">
             <IconButton
+              disableRipple
+              className="duration-300 hover:text-sky-400"
               sx={{ padding: 0, marginTop: 1 }}
               onClick={() => handlePlayHighlightSurah(index, true)}
             >
@@ -43,6 +45,8 @@ const VerseItem = ({
           <div></div>
           <Tooltip title="Play Surah from this Ayah" arrow placement="top">
             <IconButton
+              disableRipple
+              className="duration-300 hover:text-sky-600"
               sx={{ padding: 0, marginTop: 1 }}
               onClick={() => handlePlayHighlightSurah(index, false)}
             >
