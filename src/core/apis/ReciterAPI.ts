@@ -6,7 +6,6 @@ export const ReciterAPI = {
       url: `audio/reciters?locale=en`,
       method: "GET",
     });
-    // returning the product returned by the API
     return response.data;
   },
   getSurahAudioData: async function (surahId: number, reciterId: number) {
@@ -14,7 +13,6 @@ export const ReciterAPI = {
       url: `audio/reciters/${reciterId}/audio_files?chapter=${surahId}&segments=true`,
       method: "GET",
     });
-    // returning the product returned by the API
     return response.data;
   },
 };

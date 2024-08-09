@@ -49,6 +49,7 @@ const SurahDetails = () => {
         setVerses(verses);
         setPagination(pagination);
       });
+      ReciterAPI.getAllReciters().then((res) => console.log(res));
       ReciterAPI.getSurahAudioData(+surahId, 7).then((audioData: AudioData) => {
         audioData.audio_files[0]?.verse_timings.map((timing) => {
           timing.segments = timing.segments.filter(

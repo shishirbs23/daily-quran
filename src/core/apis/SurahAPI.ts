@@ -11,8 +11,6 @@ export const SurahAPI = {
         ? cancelApiObject[this.getSurah.name].handleRequestCancellation().signal
         : undefined,
     });
-
-    // returning the product returned by the API
     return response.data.chapter;
   },
   getSurahInfo: async function (id: number, cancel = false) {
@@ -22,11 +20,9 @@ export const SurahAPI = {
       // retrieving the signal value by using the property name
       signal: cancel
         ? cancelApiObject[this.getSurahInfo.name].handleRequestCancellation()
-            .signal
+          .signal
         : undefined,
     });
-
-    // returning the product returned by the API
     return response.data.chapter_info;
   },
   getAllSurahs: async function (cancel = false) {
@@ -35,7 +31,7 @@ export const SurahAPI = {
       method: "GET",
       signal: cancel
         ? cancelApiObject[this.getAllSurahs.name].handleRequestCancellation()
-            .signal
+          .signal
         : undefined,
     });
 

@@ -7,7 +7,7 @@ type SurahInfoProps = {
 const SurahDataInfo = ({ surahInfo }: SurahInfoProps) => {
   return (
     <div
-      className="pt-6"
+      className="m-auto w-10/12 pt-6"
       dangerouslySetInnerHTML={{ __html: surahInfo?.text ?? "" }}
     ></div>
   );

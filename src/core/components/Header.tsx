@@ -10,16 +10,7 @@ const Header = ({ title }: HeaderProps) => (
       <Typography
         variant="h6"
         component="div"
-        sx={{ flexGrow: 1 }}
-        className="text-slate-700"
-      >
-        Daily Quran
-      </Typography>
-      <Typography
-        variant="h6"
-        component="div"
-        sx={{ flexGrow: 1 }}
-        className="text-slate-700"
+        className="text-slate-700 text-center w-full"
       >
         {title}
       </Typography>

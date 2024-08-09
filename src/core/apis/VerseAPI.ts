@@ -8,11 +8,11 @@ export const VerseAPI = {
       method: "GET",
       // retrieving the signal value by using the property name
       signal: cancel
-        ? cancelApiObject[this.getBySurah.name].handleRequestCancellation().signal
+        ? cancelApiObject[this.getBySurah.name].handleRequestCancellation()
+            .signal
         : undefined,
     });
 
-    // returning the product returned by the API
     return response.data;
   },
   getByPage: async function (pageNumber: number, cancel = false) {
@@ -21,11 +21,11 @@ export const VerseAPI = {
       method: "GET",
       // retrieving the signal value by using the property name
       signal: cancel
-        ? cancelApiObject[this.getBySurah.name].handleRequestCancellation().signal
+        ? cancelApiObject[this.getBySurah.name].handleRequestCancellation()
+            .signal
         : undefined,
     });
 
-    // returning the product returned by the API
     return response.data;
   },
   getByJuz: async function (juzNumber: number, cancel = false) {
@@ -34,11 +34,11 @@ export const VerseAPI = {
       method: "GET",
       // retrieving the signal value by using the property name
       signal: cancel
-        ? cancelApiObject[this.getBySurah.name].handleRequestCancellation().signal
+        ? cancelApiObject[this.getBySurah.name].handleRequestCancellation()
+            .signal
         : undefined,
     });
 
-    // returning the product returned by the API
     return response.data;
   },
 };
