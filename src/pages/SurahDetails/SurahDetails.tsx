@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Button, capitalize, Typography } from "@mui/material";
-import { PlayCircle } from "@mui/icons-material";
+import { Box } from "@mui/material";
 
 // Components
+import SurahData from "./components/SurahData";
+import PlaySurahButton from "./components/PlaySurahButton";
+import Verses from "./components/Verses";
 import SurahPlayer from "./components/SurahPlayer";
-import VerseItem from "./components/VerseItem";
+import SurahDataInfo from "./components/SurahDataInfo";
 
 // Models
 import { AudioData, AudioFile } from "../../core/models/AudioData";
@@ -105,55 +107,19 @@ const SurahDetails = () => {
 
   return (
     <Box className="text-slate-700">
-      <Box className="text-center">
-        <Typography sx={{ fontWeight: 700, fontSize: 20 }}>
-          {surah?.name_simple} ({surah?.name_arabic})
-        </Typography>
-        <Typography className="py-1 text-xs">
-          {surah?.translated_name.name}
-        </Typography>
-        <Typography>Total Verses: {surah?.verses_count}</Typography>
-        <Typography className="pt-1 text-lg">
-          Revelation Place: {capitalize(surah?.revelation_place ?? "")}
-        </Typography>
-      </Box>
+      {surah && <SurahData surah={surah} />}
 
-      <Box className="flex justify-center my-4">
-        <Button
-          sx={{ textTransform: "capitalize" }}
-          variant="contained"
-          startIcon={<PlayCircle />}
-          disableElevation
-          onClick={() => playFromSpecificTime(0, false)}
-        >
-          Play Full Surah
-        </Button>
-      </Box>
+      <PlaySurahButton playFromSpecificTime={playFromSpecificTime} />
 
-      <Box className="m-auto mt-20 w-10/12">
-        {verses?.map((verse, index) => (
-          <div
-            key={verse.id}
-            ref={(el) =>
-              ((verseRefs.current[index] as HTMLDivElement) =
-                el as HTMLDivElement)
-            }
-          >
-            <VerseItem
-              index={index}
-              ayahIndex={ayahIndex}
-              wordIndex={wordIndex}
-              verse={verse}
-              playFromSpecificTime={playFromSpecificTime}
-            />
-          </div>
-        ))}
-      </Box>
+      <Verses
+        verses={verses || []}
+        verseRefs={verseRefs}
+        ayahIndex={ayahIndex}
+        wordIndex={wordIndex}
+        playFromSpecificTime={playFromSpecificTime}
+      />
 
-      <div
-        className="pt-6"
-        dangerouslySetInnerHTML={{ __html: surahInfo?.text ?? "" }}
-      ></div>
+      {surahInfo && <SurahDataInfo surahInfo={surahInfo} />}
 
       {ayahIndex != null && (
         <SurahPlayer
