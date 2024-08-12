@@ -8,6 +8,7 @@ import PlaySurahButton from "./components/PlaySurahButton";
 import Verses from "./components/Verses";
 import SurahPlayer from "./components/SurahPlayer";
 import SurahDataInfo from "./components/SurahDataInfo";
+import ReciterDropdown from "./components/ReciterDropdown";
 
 // Models
 import { AudioData, AudioFile } from "../../core/models/AudioData";
@@ -16,6 +17,7 @@ import { SurahInfo } from "../../core/models/SurahInfo";
 import { VerseData } from "../../core/models/VerseData";
 import { Pagination } from "../../core/models/Pagination";
 import { Verse } from "../../core/models/Verse";
+import { Reciter } from "../../core/models/Reciter";
 
 // APIs
 import { SurahAPI } from "../../core/apis/SurahAPI";
@@ -32,6 +34,8 @@ const SurahDetails = () => {
   const [stopTime, setStopTime] = useState<number | null>(null);
   const [ayahIndex, setAyahIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState<number>(-1);
+  const [reciters, setReciters] = useState<Reciter[]>();
+  const [reciterId, setReciterId] = useState<string>();
 
   const { surahId } = useParams();
 
@@ -49,20 +53,31 @@ const SurahDetails = () => {
         setVerses(verses);
         setPagination(pagination);
       });
-      ReciterAPI.getAllReciters().then((res) => console.log(res));
-      ReciterAPI.getSurahAudioData(+surahId, 7).then((audioData: AudioData) => {
-        audioData.audio_files[0]?.verse_timings.map((timing) => {
-          timing.segments = timing.segments.filter(
-            (segment) => segment.length === 3
-          );
-          return timing;
-        });
-        setAudioFile(audioData.audio_files[0]);
+      ReciterAPI.getAllReciters().then((reciters: Reciter[]) => {
+        setReciters(reciters);
+        setReciterId(reciters[0].id.toString());
       });
     }
   }, [surahId]);
 
-  const playFromSpecificTime = (index: number, pauseSurah: boolean) => {
+  const getSurahAudioData = async (index: number, pauseSurah: boolean) => {
+    if (surahId && reciterId) {
+      await ReciterAPI.getSurahAudioData(+surahId, +reciterId).then(
+        (audioData: AudioData) => {
+          audioData.audio_files[0]?.verse_timings.map((timing) => {
+            timing.segments = timing.segments.filter(
+              (segment) => segment.length === 3
+            );
+            return timing;
+          });
+          setAudioFile(audioData.audio_files[0]);
+          playFromSpecificTime(index, pauseSurah);
+        }
+      );
+    }
+  };
+
+  const playFromSpecificTime = async (index: number, pauseSurah: boolean) => {
     setAyahIndex(index);
 
     const totalSegments: number =
@@ -97,6 +112,8 @@ const SurahDetails = () => {
       });
   };
 
+  const updateReciterId = (reciterId: string) => setReciterId(reciterId);
+
   const updateAyahIndex = (ayahIndex: number) => {
     setAyahIndex(ayahIndex);
     scrollToTop(ayahIndex);
@@ -110,14 +127,21 @@ const SurahDetails = () => {
     <Box className="text-slate-700">
       {surah && <SurahData surah={surah} />}
 
-      <PlaySurahButton playFromSpecificTime={playFromSpecificTime} />
+      <PlaySurahButton getSurahAudioData={getSurahAudioData} />
+
+      {reciters?.length && (
+        <ReciterDropdown
+          reciters={reciters}
+          updateReciterId={updateReciterId}
+        />
+      )}
 
       <Verses
         verses={verses || []}
         verseRefs={verseRefs}
         ayahIndex={ayahIndex}
         wordIndex={wordIndex}
-        playFromSpecificTime={playFromSpecificTime}
+        getSurahAudioData={getSurahAudioData}
       />
 
       {surahInfo && <SurahDataInfo surahInfo={surahInfo} />}

@@ -8,7 +8,7 @@ type VersesProp = {
   verseRefs: RefObject<HTMLDivElement[]>;
   ayahIndex: number;
   wordIndex: number;
-  playFromSpecificTime: (index: number, pauseSurah: boolean) => void;
+  getSurahAudioData: (index: number, pauseSurah: boolean) => void;
 };
 
 const Verses = ({
@@ -16,7 +16,7 @@ const Verses = ({
   verseRefs,
   ayahIndex,
   wordIndex,
-  playFromSpecificTime,
+  getSurahAudioData,
 }: VersesProp) => {
   return (
     <Box className="m-auto mt-20 w-10/12">
@@ -34,7 +34,7 @@ const Verses = ({
             ayahIndex={ayahIndex}
             wordIndex={wordIndex}
             verse={verse}
-            playFromSpecificTime={playFromSpecificTime}
+            getSurahAudioData={getSurahAudioData}
           />
         </div>
       ))}

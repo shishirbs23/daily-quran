@@ -6,7 +6,7 @@ export const ReciterAPI = {
       url: `audio/reciters?locale=en`,
       method: "GET",
     });
-    return response.data;
+    return response.data.reciters;
   },
   getSurahAudioData: async function (surahId: number, reciterId: number) {
     const response = await apiAlt.request({

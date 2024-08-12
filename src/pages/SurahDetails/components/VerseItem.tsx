@@ -7,7 +7,7 @@ type VerseItemProps = {
   ayahIndex: number;
   wordIndex: number;
   verse: Verse;
-  playFromSpecificTime: (index: number, pauseSurah: boolean) => void;
+  getSurahAudioData: (index: number, pauseSurah: boolean) => void;
 };
 
 const VerseItem = ({
@@ -15,10 +15,10 @@ const VerseItem = ({
   ayahIndex,
   wordIndex,
   verse,
-  playFromSpecificTime,
+  getSurahAudioData,
 }: VerseItemProps) => {
   const handlePlayHighlightSurah = (index: number, pauseSurah: boolean) => {
-    playFromSpecificTime(index, pauseSurah);
+    getSurahAudioData(index, pauseSurah);
   };
 
   return (

@@ -2,10 +2,10 @@ import { PlayCircle } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
 
 type PlaySurahButtonProps = {
-  playFromSpecificTime: (index: number, pauseSurah: boolean) => void;
+  getSurahAudioData: (index: number, pauseSurah: boolean) => void;
 };
 
-const PlaySurahButton = ({ playFromSpecificTime }: PlaySurahButtonProps) => {
+const PlaySurahButton = ({ getSurahAudioData }: PlaySurahButtonProps) => {
   return (
     <Box className="flex justify-center my-4">
       <Button
@@ -13,7 +13,7 @@ const PlaySurahButton = ({ playFromSpecificTime }: PlaySurahButtonProps) => {
         variant="contained"
         startIcon={<PlayCircle />}
         disableElevation
-        onClick={() => playFromSpecificTime(0, false)}
+        onClick={() => getSurahAudioData(0, false)}
       >
         Play Full Surah
       </Button>
